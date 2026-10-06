@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — Little Stories{% endblock %}
+
+{% block content %}
+<article class="post-section">
+    <div class="container post-container">
+        <a class="back-link" href="{{ url_for('home') }}#stories">← Back to all stories</a>
+        <div class="post-heading">
+            <p class="eyebrow">{% if post.is_demo %}A SAMPLE STORY{% else %}A LITTLE STORY{% endif %}</p>
+            <h1>{{ post.title }}</h1>
+            <div class="post-byline">
+                <span class="author-avatar">{{ post.author_name[0] }}</span>
+                <span>{{ post.author_name }} <span class="byline-date">· {{ post.created_at|pretty_date }}</span>
+                    {% if post.updated_at %}<span class="byline-date">· Updated {{ post.updated_at|pretty_date }}</span>{% endif %}
+                </span>
+            </div>
+            {% if post.is_demo and post.author_email %}
+            <p class="author-email post-sample-email">Example email: {{ post.author_email }} (sample only—not a login)</p>
+            {% endif %}
+            {% if current_user and post.author_id == current_user._id %}
+            <div class="owner-actions">
+                <a class="btn btn-outline-dark btn-sm rounded-pill" href="{{ url_for('edit_post', post_id=post._id) }}">Edit post</a>
+                <form method="post" action="{{ url_for('delete_post', post_id=post._id) }}"
+                      onsubmit="return confirm('Delete this post and all its comments? This cannot be undone.');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Delete post</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="post-body">{{ post.content }}</div>
+
+        <section class="comments-section" id="comments">
+            <div class="comments-heading">
+                <p class="eyebrow">THE CONVERSATION</p>
+                <h2>Comments <span>({{ post.comments|length }})</span></h2>
+            </div>
+            {% if current_user %}
+            <form method="post" action="{{ url_for('add_comment', post_id=post._id) }}" class="comment-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="comment-text" class="form-label">Add a thoughtful comment</label>
+                <textarea id="comment-text" name="text" class="form-control" rows="3" maxlength="2000"
+                          placeholder="What did this story make you think about?" required></textarea>
+                <button type="submit" class="btn btn-dark rounded-pill">Post comment</button>
+            </form>
+            {% else %}
+            <div class="comment-login-note">Want to join the conversation? <a href="{{ url_for('login') }}">Log in</a> or <a href="{{ url_for('register') }}">create an account</a>.</div>
+            {% endif %}
+
+            <div class="comment-list">
+                {% for comment in post.comments %}
+                <article class="comment-item">
+                    <span class="author-avatar">{{ comment.author_name[0] }}</span>
+                    <div class="comment-content">
+                        <div class="comment-meta"><strong>{{ comment.author_name }}</strong><span>{{ comment.created_at|pretty_date }}</span></div>
+                        <p>{{ comment.text }}</p>
+                    </div>
+                    {% if current_user and comment.author_id == current_user._id %}
+                    <form method="post" action="{{ url_for('delete_comment', comment_id=comment._id) }}"
+                          onsubmit="return confirm('Delete your comment?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="comment-delete" type="submit" aria-label="Delete your comment">Delete</button>
+                    </form>
+                    {% endif %}
+                </article>
+                {% else %}
+                <p class="empty-comments">No comments yet. Be the first to join the conversation.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</article>
+{% endblock %}

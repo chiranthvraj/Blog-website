@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}My posts — Little Stories{% endblock %}
+
+{% block content %}
+<section class="stories-section dashboard-section">
+    <div class="container">
+        <div class="dashboard-heading">
+            <div>
+                <p class="eyebrow">YOUR WRITING DESK</p>
+                <h1>My posts</h1>
+                <p class="form-intro">Everything you have shared, all in one place.</p>
+            </div>
+            <a class="btn btn-dark rounded-pill" href="{{ url_for('create_post') }}">Write a new post <span aria-hidden="true">↗</span></a>
+        </div>
+        {% if posts %}
+        <div class="dashboard-list">
+            {% for post in posts %}
+            <article class="dashboard-post">
+                <div>
+                    <p class="dashboard-date">Published {{ post.created_at|pretty_date }}{% if post.updated_at %} · Edited {{ post.updated_at|pretty_date }}{% endif %}</p>
+                    <h2>{{ post.title }}</h2>
+                    <p>{{ post.content[:190] }}{% if post.content|length > 190 %}…{% endif %}</p>
+                </div>
+                <div class="dashboard-actions">
+                    <a class="btn btn-outline-dark btn-sm rounded-pill" href="{{ url_for('post_detail', post_id=post._id) }}">View</a>
+                    <a class="btn btn-outline-dark btn-sm rounded-pill" href="{{ url_for('edit_post', post_id=post._id) }}">Edit</a>
+                    <form method="post" action="{{ url_for('delete_post', post_id=post._id) }}"
+                          onsubmit="return confirm('Delete this post and all its comments? This cannot be undone.');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn btn-outline-danger btn-sm rounded-pill" type="submit">Delete</button>
+                    </form>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-dashboard">
+            <span class="empty-icon" aria-hidden="true">✳</span>
+            <h2>Your first story is waiting.</h2>
+            <p>You haven’t published any posts yet. Start with an idea, a question, or something you learned.</p>
+            <a class="btn btn-dark rounded-pill" href="{{ url_for('create_post') }}">Create your first post</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

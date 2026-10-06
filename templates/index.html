@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> A LITTLE SPACE ON THE INTERNET</p>
+            <h1>Good stories make<br>room for <span>good ideas.</span></h1>
+            <p class="hero-description">
+                Thoughtful notes, fresh perspectives, and stories worth sharing.
+                Find a quiet moment and read something new.
+            </p>
+            <a class="btn btn-dark rounded-pill hero-button" href="#stories">
+                Find your next read <span aria-hidden="true">↓</span>
+            </a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+            <div class="art-orbit orbit-one"></div>
+            <div class="art-orbit orbit-two"></div>
+            <div class="art-sun"></div>
+            <div class="art-card">
+                <span class="art-card-label">A NOTE TO SELF</span>
+                <span class="art-card-title">Stay curious.<br>Keep noticing.</span>
+                <span class="art-card-mark">✳</span>
+            </div>
+            <span class="art-spark spark-one">✳</span>
+            <span class="art-spark spark-two">✳</span>
+        </div>
+        <div class="hero-bottom">
+            <span>WORDS, IDEAS &amp; OTHER GOOD THINGS</span>
+            <a href="#stories" aria-label="Scroll to latest stories">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a>
+        </div>
+    </div>
+</section>
+
+<section class="stories-section" id="stories">
+    <div class="container">
+        <div class="section-heading d-flex flex-column flex-md-row justify-content-between align-items-md-end">
+            <div>
+                <p class="eyebrow">THE READING ROOM</p>
+                <h2>A few good reads</h2>
+            </div>
+            <p class="section-note">Ideas for wherever your day takes you.</p>
+        </div>
+
+        <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <article class="story-card h-100">
+                    <div class="story-art story-art-{{ post.color }}" aria-hidden="true">
+                        <span class="story-art-word">{{ post.category[0] }}</span>
+                        <span class="story-art-caption">{{ post.category }} NOTES</span>
+                    </div>
+                    <div class="story-card-body">
+                        <div class="story-meta">
+                            <span>{{ post.category }}</span>
+                            <span>{{ post.reading_time }}</span>
+                        </div>
+                        <h3>{{ post.title }}</h3>
+                        <p>{{ post.excerpt }}</p>
+                        {% if post.is_demo and post.author_email %}
+                        <p class="author-email sample-email">Example email: {{ post.author_email }} <span>(sample only)</span></p>
+                        {% endif %}
+                        <div class="story-byline">
+                            <span class="author-avatar">{{ post.author_name[0] }}</span>
+                            <span class="author-details">
+                                <span>{{ post.author_name }} <span class="byline-date">· {{ post.created_at|pretty_date }}</span></span>
+                            </span>
+                        </div>
+                        <a class="story-read-link" href="{{ url_for('post_detail', post_id=post._id) }}">Read story <span aria-hidden="true">↗</span></a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="sample-note">Example stories are included to help you explore. Their example.com email addresses are samples, not working accounts. Create your own account to publish and manage real posts.</p>
+    </div>
+</section>
+
+<section class="writing-section" id="start-writing">
+    <div class="container">
+        <div class="writing-panel" id="about">
+            <div>
+                <p class="eyebrow">YOUR NEXT STORY</p>
+                <h2>Every good story<br>starts somewhere.</h2>
+                {% if current_user %}
+                <a class="btn btn-dark rounded-pill writing-cta" href="{{ url_for('create_post') }}">Create a new post <span aria-hidden="true">↗</span></a>
+                {% else %}
+                <a class="btn btn-dark rounded-pill writing-cta" href="{{ url_for('register') }}">Create your free account <span aria-hidden="true">↗</span></a>
+                {% endif %}
+            </div>
+            <p>Share an idea, a lesson you learned, or a story worth telling. Once you are logged in, choose “Write a post” to publish it. You can edit or delete your own posts and join the conversation with comments.</p>
+            <span class="writing-mark" aria-hidden="true">✳</span>
+        </div>
+    </div>
+</section>
+{% endblock %}

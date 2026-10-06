@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Log in — Little Stories{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="account-card">
+            <p class="eyebrow">WELCOME BACK</p>
+            <h1>Good to see you.</h1>
+            <p class="form-intro">Log in to write a story, manage your posts, and join the conversation.</p>
+            <form method="post" action="{{ url_for('login', next=request.args.get('next', '')) }}" class="account-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="email" class="form-label">Email address</label>
+                <input id="email" name="email" type="email" class="form-control" value="{{ email or '' }}"
+                       autocomplete="email" maxlength="254" required>
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" type="password" class="form-control"
+                       autocomplete="current-password" required>
+                <button type="submit" class="btn btn-dark rounded-pill w-100 account-submit">Log in</button>
+            </form>
+            <p class="account-switch">New to Little Stories? <a href="{{ url_for('register') }}">Create an account</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

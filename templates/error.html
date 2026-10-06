@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ error_title|default('Something went wrong') }} — Little Stories{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="account-card error-card">
+            <p class="eyebrow">LET'S GET YOU BACK</p>
+            <h1>That didn’t work.</h1>
+            <p class="form-intro">{{ message }}</p>
+            <a class="btn btn-dark rounded-pill account-submit" href="{{ url_for('home') }}">Return to the home page</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Write a post — Little Stories{% endblock %}
+
+{% block content %}
+<section class="editor-section">
+    <div class="container editor-container">
+        <a class="back-link" href="{{ url_for('home') }}">← Back to stories</a>
+        <p class="eyebrow editor-eyebrow">YOUR STORY, YOUR WORDS</p>
+        <h1>Write a new post</h1>
+        <p class="form-intro">A clear title and a few honest paragraphs are a great place to start.</p>
+        <form method="post" class="post-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label for="title" class="form-label">Post title</label>
+            <input id="title" name="title" type="text" class="form-control title-input"
+                   value="{{ title or '' }}" maxlength="160" placeholder="Give your story a title" required>
+            <label for="content" class="form-label">Your story</label>
+            <textarea id="content" name="content" class="form-control content-input" rows="14"
+                      maxlength="20000" placeholder="Start writing here..." required>{{ content or '' }}</textarea>
+            <div class="editor-help">Up to 20,000 characters. Your post will be published as soon as you submit it.</div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-dark rounded-pill">Publish post <span aria-hidden="true">↗</span></button>
+                <a class="btn btn-outline-secondary rounded-pill" href="{{ url_for('home') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

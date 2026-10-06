@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Edit post — Little Stories{% endblock %}
+
+{% block content %}
+<section class="editor-section">
+    <div class="container editor-container">
+        <a class="back-link" href="{{ url_for('post_detail', post_id=post._id) }}">← Back to your story</a>
+        <p class="eyebrow editor-eyebrow">MAKE IT YOURS</p>
+        <h1>Edit your post</h1>
+        <p class="form-intro">Update your title or story. Your post will show when it was last edited.</p>
+        <form method="post" class="post-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label for="title" class="form-label">Post title</label>
+            <input id="title" name="title" type="text" class="form-control title-input"
+                   value="{{ post.title }}" maxlength="160" required>
+            <label for="content" class="form-label">Your story</label>
+            <textarea id="content" name="content" class="form-control content-input" rows="14"
+                      maxlength="20000" required>{{ post.content }}</textarea>
+            <div class="editor-help">Up to 20,000 characters.</div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-dark rounded-pill">Save changes</button>
+                <a class="btn btn-outline-secondary rounded-pill" href="{{ url_for('post_detail', post_id=post._id) }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Create an account — Little Stories{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="account-card">
+            <p class="eyebrow">MAKE YOURSELF AT HOME</p>
+            <h1>Start with a story.</h1>
+            <p class="form-intro">Create an account to publish posts, manage your writing, and comment on stories.</p>
+            <form method="post" action="{{ url_for('register') }}" class="account-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="name" class="form-label">Your name</label>
+                <input id="name" name="name" type="text" class="form-control" value="{{ name or '' }}"
+                       autocomplete="name" maxlength="80" required>
+                <label for="email" class="form-label">Email address</label>
+                <input id="email" name="email" type="email" class="form-control" value="{{ email or '' }}"
+                       autocomplete="email" maxlength="254" required>
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" type="password" class="form-control"
+                       autocomplete="new-password" minlength="8" maxlength="128" required>
+                <span class="field-hint">Use at least 8 characters. Your password is stored securely as a hash.</span>
+                <button type="submit" class="btn btn-dark rounded-pill w-100 account-submit">Create my account</button>
+            </form>
+            <p class="account-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}
